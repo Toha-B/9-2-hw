@@ -9,12 +9,45 @@
 ```bash
 sudo apt update
 ```
-
-
-3. Установите PostgreSQL. Для установки достаточна та версия что есть в системном репозитороии Debian 11
-4. Пользуясь конфигуратором комманд с официального сайта, составьте набор команд для установки последней версии Zabbix с поддержкой PostgreSQL и Apache
-5. Выполните все необходимые команды для установки Zabbix Server и Zabbix Web Server
-
+```bash
+sudo apt install postgresql
+```
+2. Устанавливаю репозиторий Zabbix:
+```bash
+wget https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.0-4%2Bubuntu22.04_all.deb
+```
+```bash
+dpkg -i zabbix-release_6.0-4+ubuntu22.04_all.deb
+```
+```bash
+apt update
+```
+3. Устанавливаю Zabbix сервер, веб-интерфейс и агент:
+```bash
+sudo apt install zabbix-server-pgsql zabbix-frontend-php php8.1-pgsql zabbix-apache-conf zabbix-sql-scripts zabbix-agent
+```
+4. Создаю пользователя и БД:
+```bash
+sudo -u postgres createuser --pwprompt zabbix
+```
+```bash
+sudo -u postgres createdb -O zabbix zabbix
+```
+5. Импортирую начальную схему и данные:
+```bash
+zcat /usr/share/zabbix-sql-scripts/postgresql/server.sql.gz | sudo -u zabbix psql zabbix
+```
+6. Редактирую файл файл /etc/zabbix/zabbix_server.conf :
+```
+DBPassword=password
+```
+7. Запускаю процессы Zabbix сервера и агента и настраиваю их запуск при загрузке ОС:
+```bash
+systemctl restart zabbix-server zabbix-agent apache2
+```
+```bash
+systemctl enable zabbix-server zabbix-agent apache2
+```
 
 ### Задание 2 
 
