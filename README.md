@@ -48,6 +48,7 @@ systemctl restart zabbix-server zabbix-agent apache2
 ```bash
 systemctl enable zabbix-server zabbix-agent apache2
 ```
+![tz_1.1](scrshts/tz_1.1.png?raw=true "Optional Title")
 
 ### Задание 2 
 
